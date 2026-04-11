@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .difficulty-easy { background-color: #28a745; }
+    .difficulty-medium { background-color: #ffc107; }
+    .difficulty-hard { background-color: #dc3545; }
+</style>
+
+<div style="max-width: 700px; margin: 30px auto; text-align: center;">
+    <h2>{{ puzzle.title }}</h2>
+    <p><strong>By:</strong> {{ puzzle.user.username }} &nbsp;&nbsp; | &nbsp;&nbsp; 
+        <strong>Difficulty:</strong> 
+        <span class="difficulty-{{ puzzle.difficulty|lower }}" 
+              style="color: white; padding: 4px 8px; border-radius: 5px; font-size: 0.9em;">
+                {{ puzzle.difficulty }}
+        </span>
+    </p>
+    
+    {% if puzzle.description %}
+        <p style="margin: 20px 0; font-size: 1.05em; color: #444;">{{ puzzle.description }}</p>
+    {% endif %}
+
+    <div style="margin: 25px 0; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+        <p style="font-size: 1.1em; margin-bottom: 10px;"><strong>What is the answer?</strong></p>
+        
+        <form method="POST">
+            <input type="text" 
+                   name="answer" 
+                   placeholder="Type your answer here..."
+                   style="width: 80%; max-width: 400px; padding: 12px; font-size: 1.1em; border: 2px solid #ccc; border-radius: 8px;">
+            <br><br>
+            <button type="submit" 
+                    style="padding: 12px 30px; font-size: 1.1em; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                Submit Answer
+            </button>
+        </form>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('puzzles.list_puzzles') }}" 
+           style="color: #007bff; text-decoration: none;">← Back to All Puzzles</a>
+    </div>
+</div>
+{% endblock %}

@@ -26,7 +26,7 @@
             {% endif %}
             
             <div style="margin-top: 15px;">
-                <a href="{{ url_for('main.index') }}" 
+                <a href="{{ url_for('puzzles.play', puzzle_id=puzzle.id) }}" 
                    style="display: inline-block; padding: 8px 16px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
                     Play Puzzle
                 </a>

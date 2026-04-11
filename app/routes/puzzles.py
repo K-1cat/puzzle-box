@@ -38,3 +38,20 @@ def create():
 def list_puzzles():
     puzzles = Puzzle.query.order_by(Puzzle.created_at.desc()).all()
     return render_template('list_puzzle.html', puzzles=puzzles)
+
+# Puzzle Playing Page
+@puzzles_bp.route('/play/<int:puzzle_id>', methods=['GET', 'POST'])
+def play(puzzle_id):
+    puzzle = Puzzle.query.get_or_404(puzzle_id)
+    
+    if request.method == 'POST':
+        user_answer = request.form.get('answer', '').strip().lower() # case insensitive and whitespace trimmed
+        correct_answer = puzzle.answer.strip().lower()
+        
+        if user_answer == correct_answer:
+            flash('🎉 Correct! Well done!', 'success')
+            return redirect(url_for('puzzles.list_puzzles'))
+        else:
+            flash('❌ Wrong answer. Try again!', 'danger')
+    
+    return render_template('play_puzzle.html', puzzle=puzzle)

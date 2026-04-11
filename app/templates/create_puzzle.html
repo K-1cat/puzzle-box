@@ -9,17 +9,19 @@
     <label>{{ form.title.label }}</label>
     {{ form.title }}
     {% for error in form.title.errors %}<p style="color:red;">{{ error }}</p>{% endfor %}
+    <br><br>
 
-    <label>{{ form.description.label }}</label>
-    {{ form.description }}
+    <label>{{ form.description.label }}</label><br>
+    {{ form.description }}<br><br>
 
     <label>{{ form.answer.label }}</label>
     {{ form.answer }}
     {% for error in form.answer.errors %}<p style="color:red;">{{ error }}</p>{% endfor %}
+    <br><br>
 
-    <label>{{ form.difficulty.label }}</label>
+    <label>{{ form.difficulty.label }}</label><br>
     {{ form.difficulty }}
-    
+    <br><br>
     <button type="submit">Create Puzzle</button>
 </form>
 
