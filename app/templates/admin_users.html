@@ -1,21 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Registered Users (Admin)</h2>
-<table border="1" cellpadding="8">
-    <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Registered</th>
-    </tr>
-    {% for user in users %}
-    <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.created_at.strftime('%Y-%m-%d %H:%M') if user.created_at else 'N/A' }}</td>
-    </tr>
-    {% endfor %}
-</table>
-<p><a href="{{ url_for('main.index') }}">Back to Home</a></p>
+<div style="max-width: 900px; margin: 40px auto; padding: 20px;">
+    <h2>Registered Users</h2>
+    <p><strong>Total users:</strong> {{ users|length }}</p>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="background-color: #f0f0f0;">
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">ID</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Username</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ user.id }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">{{ user.username }}</td>
+                <td style="padding: 12px; border: 1px solid #ddd;">
+                    {{ user.created_at.strftime('%Y-%m-%d %H:%M') if user.created_at else 'N/A' }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('main.index') }}" 
+           style="padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+            ← Back to Home
+        </a>
+    </div>
+</div>
 {% endblock %}

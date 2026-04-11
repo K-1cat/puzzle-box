@@ -1,15 +1,27 @@
 {% extends "base.html" %}
+
 {% block content %}
-<h2>Login</h2>
+<h2 style="text-align: center;">Login to Puzzle Box</h2>
+
 <form method="POST">
     {{ form.hidden_tag() }}
-    <p>{{ form.login.label }}<br>{{ form.login(size=32) }}</p>
-    {% for error in form.login.errors %}<span style="color:red;">{{ error }}</span>{% endfor %}
     
-    <p>{{ form.password.label }}<br>{{ form.password(size=32) }}</p>
-    {% for error in form.password.errors %}<span style="color:red;">{{ error }}</span>{% endfor %}
-    
-    <p>{{ form.submit() }}</p>
+    <label>{{ form.username.label }}</label>
+    {{ form.username }}
+    {% for error in form.username.errors %}
+        <p style="color:red; font-size:14px;">{{ error }}</p>
+    {% endfor %}
+
+    <label>{{ form.password.label }}</label>
+    {{ form.password }}
+    {% for error in form.password.errors %}
+        <p style="color:red; font-size:14px;">{{ error }}</p>
+    {% endfor %}
+
+    <button type="submit">Login</button>
 </form>
-<p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a></p>
+
+<p style="text-align: center; margin-top: 20px;">
+    Don't have an account? <a href="{{ url_for('auth.register') }}">Create one here</a>
+</p>
 {% endblock %}

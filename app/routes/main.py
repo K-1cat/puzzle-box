@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app.models import User
 
@@ -12,8 +12,10 @@ def index():
 @main_bp.route('/admin/users')
 @login_required
 def admin_users():
-    if not current_user.username == "admin":
-        return "Access denied", 403
+    # Only allow access if username contains "admin" or you are the first user (id == 1)
+    if current_user.id != 1 and "admin" not in current_user.username.lower():
+        flash("Access denied. Admin only.", "danger")
+        return redirect(url_for('main.index'))
     
-    users = User.query.all()
+    users = User.query.order_by(User.created_at.desc()).all()
     return render_template('admin_users.html', users=users)
