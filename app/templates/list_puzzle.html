@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .difficulty-easy { background-color: #28a745; }
+    .difficulty-medium { background-color: #ffc107; }
+    .difficulty-hard { background-color: #dc3545; }
+</style>
+
+<h2 style="text-align: center;">All Puzzles</h2>
+
+{% if puzzles %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
+        {% for puzzle in puzzles %}
+        <div style="border: 1px solid #ddd; border-radius: 10px; padding: 15px; background: white;">
+            <h3>{{ puzzle.title }}</h3>
+            <p><strong>By:</strong> {{ puzzle.user.username }}</p>
+            <p><strong>Difficulty:</strong> 
+                <span class="difficulty-{{ puzzle.difficulty|lower }}" 
+                      style="color: white; padding: 4px 8px; border-radius: 5px; font-size: 0.9em;">
+                    {{ puzzle.difficulty }}
+                </span>
+            </p>
+            {% if puzzle.description %}
+                <p style="font-size: 0.95em; color: #555;">{{ puzzle.description[:100] }}</p>
+            {% endif %}
+            
+            <div style="margin-top: 15px;">
+                <a href="{{ url_for('main.index') }}" 
+                   style="display: inline-block; padding: 8px 16px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+                    Play Puzzle
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p style="text-align: center; font-size: 1.1em;">No puzzles yet. Be the first to create one!</p>
+{% endif %}
+
+<div style="text-align: center; margin-top: 30px;">
+    <a href="{{ url_for('puzzles.create') }}" 
+       style="padding: 12px 24px; background: #28a745; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+        + Create New Puzzle
+    </a>
+</div>
+{% endblock %}

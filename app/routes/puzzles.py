@@ -9,6 +9,7 @@ from app.models import Puzzle
 
 puzzles_bp = Blueprint('puzzles', __name__)
 
+# Puzzle Creation Page
 @puzzles_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
@@ -31,3 +32,9 @@ def create():
         return redirect(url_for('main.index'))
     
     return render_template('create_puzzle.html', form=form)
+
+# Puzzle Listing Page
+@puzzles_bp.route('/list')
+def list_puzzles():
+    puzzles = Puzzle.query.order_by(Puzzle.created_at.desc()).all()
+    return render_template('list_puzzle.html', puzzles=puzzles)
