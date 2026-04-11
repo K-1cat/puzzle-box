@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Registered Users (Admin)</h2>
+<table border="1" cellpadding="8">
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Registered</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.created_at.strftime('%Y-%m-%d %H:%M') if user.created_at else 'N/A' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<p><a href="{{ url_for('main.index') }}">Back to Home</a></p>
+{% endblock %}
