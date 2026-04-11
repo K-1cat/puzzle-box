@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 style="text-align: center;">Create New Puzzle</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    
+    <label>{{ form.title.label }}</label>
+    {{ form.title }}
+    {% for error in form.title.errors %}<p style="color:red;">{{ error }}</p>{% endfor %}
+
+    <label>{{ form.description.label }}</label>
+    {{ form.description }}
+
+    <label>{{ form.answer.label }}</label>
+    {{ form.answer }}
+    {% for error in form.answer.errors %}<p style="color:red;">{{ error }}</p>{% endfor %}
+
+    <label>{{ form.difficulty.label }}</label>
+    {{ form.difficulty }}
+    
+    <button type="submit">Create Puzzle</button>
+</form>
+
+<p style="text-align: center; margin-top: 20px;">
+    <a href="{{ url_for('main.index') }}">Cancel</a>
+</p>
+{% endblock %}
