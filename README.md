@@ -7,9 +7,9 @@ Puzzle Box is a full-stack web application that allows users to create original 
 ## ✨ Features (Currently Implemented)
 - Clean and responsive web interface
 - Modular Flask architecture using Blueprints
+- User authentication system (registration & login)
 
 ## 🚀 Features (Planned / In Progress)
-- User authentication system (registration & login)
 - Database management with SQLAlchemy
 - File upload system for puzzle images
 - Puzzle creation editor (image upload + hotspot / answer settings)
@@ -53,10 +53,14 @@ puzzle-box/
 │   ├── forms.py                  # WTForms definitions
 │   ├── routes/                   # Route blueprints
 │   │   ├── __init__.py
+│   │   ├── __auth__.py           # Authentication routes
 │   │   └── main.py               # Main application routes
 │   ├── templates/                # Jinja2 HTML templates
+│   │   ├── admin_users.html      # Admin template
 │   │   ├── base.html             # Base template
-│   │   └── index.html            # Homepage template
+│   │   ├── index.html            # Homepage template
+│   │   ├── login.html            # Login template
+│   │   └── register.html         # Register template
 │   └── static/                   # Static files (CSS, JS, images)
 │       └── css/
 ├── uploads/                      # User-uploaded files
