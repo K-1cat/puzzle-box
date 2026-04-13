@@ -11,8 +11,10 @@
     {% for error in form.title.errors %}<p style="color:red;">{{ error }}</p>{% endfor %}
     <br><br>
 
-    <label>{{ form.description.label }}</label><br>
-    {{ form.description }}<br><br>
+    <label>{{ form.image.label }}</label>
+    {{ form.image }}
+    {% for error in form.image.errors %}<p style="color:red;">{{ error }}</p>{% endfor %}
+    <br><br>
 
     <label>{{ form.answer.label }}</label>
     {{ form.answer }}
@@ -22,6 +24,7 @@
     <label>{{ form.difficulty.label }}</label><br>
     {{ form.difficulty }}
     <br><br>
+    
     <button type="submit">Create Puzzle</button>
 </form>
 

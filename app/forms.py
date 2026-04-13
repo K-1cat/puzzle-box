@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField, FileField
+from flask_wtf.file import FileAllowed, FileRequired
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, Regexp
 from app.models import User
 
@@ -26,6 +27,10 @@ class LoginForm(FlaskForm):
 class PuzzleCreationForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(max=100)])
     description = TextAreaField('Description (optional)')
+    image = FileField('Puzzle Image', validators=[
+        FileRequired(message='Please upload an image!'),
+        FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Only image files allowed!')
+    ])
     answer = StringField('Answer', validators=[DataRequired(), Length(max=100)])
     difficulty = SelectField('Difficulty', choices=[('Easy', 'Easy'), ('Medium', 'Medium'), ('Hard', 'Hard')], validators=[DataRequired()])
     submit = SubmitField('Submit Puzzle')

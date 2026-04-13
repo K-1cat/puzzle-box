@@ -1,45 +1,74 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .difficulty-easy { background-color: #28a745; }
-    .difficulty-medium { background-color: #ffc107; }
-    .difficulty-hard { background-color: #dc3545; }
-</style>
+<div style="max-width: 720px; margin: 30px auto; text-align: center;">
 
-<div style="max-width: 700px; margin: 30px auto; text-align: center;">
     <h2>{{ puzzle.title }}</h2>
-    <p><strong>By:</strong> {{ puzzle.user.username }} &nbsp;&nbsp; | &nbsp;&nbsp; 
-        <strong>Difficulty:</strong> 
-        <span class="difficulty-{{ puzzle.difficulty|lower }}" 
-              style="color: white; padding: 4px 8px; border-radius: 5px; font-size: 0.9em;">
-                {{ puzzle.difficulty }}
-        </span>
-    </p>
     
-    {% if puzzle.description %}
-        <p style="margin: 20px 0; font-size: 1.05em; color: #444;">{{ puzzle.description }}</p>
+    <p style="margin: 10px 0 20px;">
+        <strong>By:</strong> {{ puzzle.user.username }} &nbsp;&nbsp;|&nbsp;&nbsp; 
+        <strong>Difficulty:</strong> {{ puzzle.difficulty }}
+    </p>
+
+    <!-- Puzzle Image -->
+    {% if puzzle.image_filename %}
+        <div style="margin: 25px 0;">
+            <img src="{{ url_for('static', filename='uploads/' + puzzle.image_filename) }}" 
+                 alt="{{ puzzle.title }}"
+                 style="max-width: 100%; 
+                        border-radius: 12px; 
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+                        border: 1px solid #ddd;">
+        </div>
+    {% else %}
+        <div style="height: 300px; background: #f0f0f0; border-radius: 12px; 
+                    display: flex; align-items: center; justify-content: center; margin: 25px 0;">
+            <p style="color: #888; font-size: 1.1em;">No image available</p>
+        </div>
     {% endif %}
 
-    <div style="margin: 25px 0; padding: 20px; background: #f8f9fa; border-radius: 10px;">
-        <p style="font-size: 1.1em; margin-bottom: 10px;"><strong>What is the answer?</strong></p>
+    {% if puzzle.description %}
+        <p style="font-size: 1.05em; color: #555; margin: 20px 0;">
+            {{ puzzle.description }}
+        </p>
+    {% endif %}
+
+    <!-- Answer Input Area -->
+    <div style="margin: 30px 0; padding: 25px; background: #f8f9fa; border-radius: 12px;">
+        <p style="font-size: 1.15em; margin-bottom: 15px;"><strong>What is the answer to this puzzle?</strong></p>
         
         <form method="POST">
             <input type="text" 
                    name="answer" 
                    placeholder="Type your answer here..."
-                   style="width: 80%; max-width: 400px; padding: 12px; font-size: 1.1em; border: 2px solid #ccc; border-radius: 8px;">
+                   autofocus
+                   style="width: 85%; 
+                          max-width: 450px; 
+                          padding: 14px; 
+                          font-size: 1.2em; 
+                          border: 2px solid #aaa; 
+                          border-radius: 8px; 
+                          text-align: center;">
             <br><br>
             <button type="submit" 
-                    style="padding: 12px 30px; font-size: 1.1em; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                    style="padding: 14px 40px; 
+                           font-size: 1.15em; 
+                           background: #28a745; 
+                           color: white; 
+                           border: none; 
+                           border-radius: 8px; 
+                           cursor: pointer;">
                 Submit Answer
             </button>
         </form>
     </div>
 
-    <div style="margin-top: 30px;">
+    <div style="margin-top: 25px;">
         <a href="{{ url_for('puzzles.list_puzzles') }}" 
-           style="color: #007bff; text-decoration: none;">← Back to All Puzzles</a>
+           style="color: #007bff; text-decoration: none; font-size: 1.05em;">
+            ← Back to All Puzzles
+        </a>
     </div>
+
 </div>
 {% endblock %}

@@ -22,6 +22,7 @@ class Puzzle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
+    image_filename = db.Column(db.String(255), nullable=True)
     answer = db.Column(db.Text, nullable=False)
     difficulty = db.Column(db.String(20), nullable=False, default='Medium')
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
