@@ -1,34 +1,88 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 style="text-align: center;">Create New Puzzle</h2>
+<div style="max-width: 700px; margin: 30px auto;">
 
-<form method="POST" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    
-    <label>{{ form.title.label }}</label>
-    {{ form.title }}
-    {% for error in form.title.errors %}<p style="color:red;">{{ error }}</p>{% endfor %}
-    <br><br>
+    <h2 style="text-align: center;">Create New Puzzle</h2>
 
-    <label>{{ form.image.label }}</label>
-    {{ form.image }}
-    {% for error in form.image.errors %}<p style="color:red;">{{ error }}</p>{% endfor %}
-    <br><br>
+    <form method="POST" enctype="multipart/form-data" id="puzzle-form">
+        {{ form.hidden_tag() }}
 
-    <label>{{ form.answer.label }}</label>
-    {{ form.answer }}
-    {% for error in form.answer.errors %}<p style="color:red;">{{ error }}</p>{% endfor %}
-    <br><br>
+        <!-- Title -->
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.title.label }}</label>
+            {{ form.title(style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;") }}
+            {% for error in form.title.errors %}<p style="color:red; font-size:14px;">{{ error }}</p>{% endfor %}
+        </div>
 
-    <label>{{ form.difficulty.label }}</label><br>
-    {{ form.difficulty }}
-    <br><br>
-    
-    <button type="submit">Create Puzzle</button>
-</form>
+        <!-- Puzzle Type -->
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.puzzle_type.label }}</label>
+            {{ form.puzzle_type(style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;") }}
+        </div>
 
-<p style="text-align: center; margin-top: 20px;">
-    <a href="{{ url_for('main.index') }}">Cancel</a>
-</p>
+        <!-- Description -->
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.description.label }}</label>
+            {{ form.description(style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; height: 80px;") }}
+        </div>
+
+        <!-- Image Upload (shown for image_text and others) -->
+        <div id="image-field" style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.image.label }}</label>
+            {{ form.image }}
+            {% for error in form.image.errors %}<p style="color:red; font-size:14px;">{{ error }}</p>{% endfor %}
+            <small style="color: #666;">Optional for some puzzle types</small>
+        </div>
+
+        <!-- Answer (only for image_text) -->
+        <div id="answer-field" style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.answer.label }}</label>
+            {{ form.answer(style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;") }}
+            {% for error in form.answer.errors %}<p style="color:red; font-size:14px;">{{ error }}</p>{% endfor %}
+        </div>
+
+        <!-- Difficulty -->
+        <div style="margin-bottom: 25px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.difficulty.label }}</label>
+            {{ form.difficulty(style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;") }}
+        </div>
+
+        <button type="submit" 
+                style="width: 100%; padding: 14px; font-size: 1.1em; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer;">
+            Create Puzzle
+        </button>
+    </form>
+
+</div>
+
+<script>
+    // Dynamic field visibility based on puzzle type
+    function toggleFields() {
+        const type = document.getElementById('puzzle_type').value;
+        const imageField = document.getElementById('image-field');
+        const answerField = document.getElementById('answer-field');
+
+        if (type === 'image_text') {
+            imageField.style.display = 'block';
+            answerField.style.display = 'block';
+        } 
+        else if (type === 'dragdrop') {
+            imageField.style.display = 'block';     // optional background
+            answerField.style.display = 'none';
+        } 
+        else if (type === 'letter_grid') {
+            imageField.style.display = 'none';
+            answerField.style.display = 'none';
+        }
+    }
+
+    // Run on page load and when type changes
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeSelect = document.getElementById('puzzle_type');
+        typeSelect.addEventListener('change', toggleFields);
+        toggleFields(); // Initial call
+    });
+</script>
+
 {% endblock %}

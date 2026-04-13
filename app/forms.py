@@ -25,12 +25,24 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class PuzzleCreationForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired(), Length(max=100)])
+    title = StringField('Puzzle Title', validators=[DataRequired(), Length(max=150)])
     description = TextAreaField('Description (optional)')
-    image = FileField('Puzzle Image', validators=[
-        FileRequired(message='Please upload an image!'),
-        FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Only image files allowed!')
+    
+    puzzle_type = SelectField('Puzzle Type', choices=[
+        ('image_text', 'Image + Text Answer'),
+        ('dragdrop', 'Drag & Drop'),
+        ('letter_grid', 'Letter Grid / Word Search')
+    ], default='image_text')
+    
+    image = FileField('Background Image (optional for some types)', validators=[
+        FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')
     ])
-    answer = StringField('Answer', validators=[DataRequired(), Length(max=100)])
-    difficulty = SelectField('Difficulty', choices=[('Easy', 'Easy'), ('Medium', 'Medium'), ('Hard', 'Hard')], validators=[DataRequired()])
-    submit = SubmitField('Submit Puzzle')
+    
+    answer = StringField('Correct Answer (for Image/Text type)', validators=[Length(max=100)])
+    difficulty = SelectField('Difficulty', choices=[
+        ('Easy', 'Easy'),
+        ('Medium', 'Medium'),
+        ('Hard', 'Hard')
+    ], default='Medium')
+    
+    submit = SubmitField('Create Puzzle')

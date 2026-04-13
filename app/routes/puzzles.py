@@ -15,34 +15,47 @@ def create():
     form = PuzzleCreationForm()
     
     if form.validate_on_submit():
-        # Handle image upload
-        image_file = form.image.data
-        if image_file:
+        image_filename = None
+        
+        # Handle image upload if provided
+        if form.image.data:
+            image_file = form.image.data
             filename = secure_filename(image_file.filename)
-            # Add uniqueness to prevent overwriting
             unique_filename = f"user_{current_user.id}_{int(datetime.utcnow().timestamp())}_{filename}"
             
             upload_folder = current_app.config['UPLOAD_FOLDER']
-            os.makedirs(upload_folder, exist_ok=True)   # Ensure folder exists
-            
-            save_path = os.path.join(upload_folder, unique_filename)
-            image_file.save(save_path)
-            
-            # Create puzzle
-            puzzle = Puzzle(
-                title=form.title.data,
-                description=form.description.data,
-                image_filename=unique_filename,
-                answer=form.answer.data.strip().lower(),
-                difficulty=form.difficulty.data,
-                user_id=current_user.id
-            )
-            
-            db.session.add(puzzle)
-            db.session.commit()
-            
-            flash('Your puzzle has been created successfully!', 'success')
-            return redirect(url_for('puzzles.list_puzzles'))
+            os.makedirs(upload_folder, exist_ok=True)
+            image_file.save(os.path.join(upload_folder, unique_filename))
+            image_filename = unique_filename
+        
+        # Build config based on puzzle type
+        config = {}
+        if form.puzzle_type.data == 'image_text':
+            config = {
+                "type": "image_text",
+                "answer": form.answer.data.strip().lower() if form.answer.data else ""
+            }
+        elif form.puzzle_type.data == 'dragdrop':
+            config = {"type": "dragdrop", "items": []}   # Will be filled later with drag & drop data
+        elif form.puzzle_type.data == 'letter_grid':
+            config = {"type": "letter_grid", "grid": [], "words": []}
+        
+        puzzle = Puzzle(
+            title=form.title.data,
+            description=form.description.data,
+            puzzle_type=form.puzzle_type.data,
+            config=config,
+            image_filename=image_filename,
+            answer=form.answer.data.strip().lower() if form.puzzle_type.data == 'image_text' else None,
+            difficulty=form.difficulty.data,
+            user_id=current_user.id
+        )
+        
+        db.session.add(puzzle)
+        db.session.commit()
+        
+        flash('Puzzle created successfully!', 'success')
+        return redirect(url_for('puzzles.list_puzzles'))
     
     return render_template('create_puzzle.html', form=form)
 

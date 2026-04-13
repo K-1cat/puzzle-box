@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import json
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,15 +21,20 @@ class User(UserMixin, db.Model):
 
 class Puzzle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    image_filename = db.Column(db.String(255), nullable=True)
-    answer = db.Column(db.Text, nullable=False)
-    difficulty = db.Column(db.String(20), nullable=False, default='Medium')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-
+    
+    # New fields for flexibility
+    puzzle_type = db.Column(db.String(50), default='image_text')  # image_text, dragdrop, letter_grid, etc.
+    config = db.Column(db.JSON)                                   # Stores all puzzle-specific data
+    image_filename = db.Column(db.String(255), nullable=True)     # For background image (optional)
+    
+    answer = db.Column(db.String(100), nullable=True)
+    difficulty = db.Column(db.String(20), default='Medium')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('puzzles', lazy=True))
 
     def __repr__(self):
-        return f'<Puzzle {self.title}>'
+        return f'<Puzzle {self.title} ({self.puzzle_type})>'

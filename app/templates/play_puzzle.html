@@ -1,57 +1,67 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="max-width: 720px; margin: 30px auto; text-align: center;">
+<div style="max-width: 800px; margin: 30px auto; text-align: center;">
 
     <h2>{{ puzzle.title }}</h2>
     
-    <p style="margin: 10px 0 20px;">
+    <p style="margin: 10px 0 25px; color: #555;">
         <strong>By:</strong> {{ puzzle.user.username }} &nbsp;&nbsp;|&nbsp;&nbsp; 
         <strong>Difficulty:</strong> {{ puzzle.difficulty }}
     </p>
 
-    <!-- Puzzle Image -->
+    <!-- Puzzle Image / Visual Area -->
     {% if puzzle.image_filename %}
-        <div style="margin: 25px 0;">
+        <div style="margin: 25px 0 35px;">
             <img src="{{ url_for('static', filename='uploads/' + puzzle.image_filename) }}" 
                  alt="{{ puzzle.title }}"
                  style="max-width: 100%; 
                         border-radius: 12px; 
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
-                        border: 1px solid #ddd;">
-        </div>
-    {% else %}
-        <div style="height: 300px; background: #f0f0f0; border-radius: 12px; 
-                    display: flex; align-items: center; justify-content: center; margin: 25px 0;">
-            <p style="color: #888; font-size: 1.1em;">No image available</p>
+                        box-shadow: 0 6px 20px rgba(0,0,0,0.15); 
+                        border: 2px solid #eee;">
         </div>
     {% endif %}
 
+    <!-- Description -->
     {% if puzzle.description %}
-        <p style="font-size: 1.05em; color: #555; margin: 20px 0;">
-            {{ puzzle.description }}
-        </p>
+        <div style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; text-align: left;">
+            <p style="margin: 0; font-size: 1.05em; color: #444;">{{ puzzle.description }}</p>
+        </div>
     {% endif %}
 
-    <!-- Answer Input Area -->
-    <div style="margin: 30px 0; padding: 25px; background: #f8f9fa; border-radius: 12px;">
-        <p style="font-size: 1.15em; margin-bottom: 15px;"><strong>What is the answer to this puzzle?</strong></p>
-        
-        <form method="POST">
-            <input type="text" 
-                   name="answer" 
-                   placeholder="Type your answer here..."
-                   autofocus
-                   style="width: 85%; 
-                          max-width: 450px; 
-                          padding: 14px; 
-                          font-size: 1.2em; 
-                          border: 2px solid #aaa; 
-                          border-radius: 8px; 
-                          text-align: center;">
+    <!-- Answer Area - Changes based on puzzle type -->
+    <div style="margin: 40px 0; padding: 30px; background: #f8f9fa; border-radius: 12px;">
+
+        <p style="font-size: 1.2em; margin-bottom: 20px;">
+            <strong>What is the answer?</strong>
+        </p>
+
+        <form method="POST" id="answer-form">
+            {% if puzzle.puzzle_type == 'image_text' or puzzle.puzzle_type == 'dragdrop' %}
+                <!-- Text input for classic and drag-drop puzzles -->
+                <input type="text" 
+                       name="answer" 
+                       id="answer-input"
+                       placeholder="Type your answer here..."
+                       autofocus
+                       style="width: 85%; 
+                              max-width: 500px; 
+                              padding: 16px; 
+                              font-size: 1.25em; 
+                              text-align: center;
+                              border: 3px solid #007bff; 
+                              border-radius: 10px;">
+            {% elif puzzle.puzzle_type == 'letter_grid' %}
+                <!-- Placeholder for future letter grid -->
+                <p style="color: #666;">Letter Grid coming soon...</p>
+            {% else %}
+                <input type="text" name="answer" placeholder="Type your answer..." 
+                       style="width: 85%; max-width: 500px; padding: 16px; font-size: 1.25em; text-align: center;">
+            {% endif %}
+
             <br><br>
             <button type="submit" 
-                    style="padding: 14px 40px; 
+                    style="padding: 14px 50px; 
                            font-size: 1.15em; 
                            background: #28a745; 
                            color: white; 
@@ -63,12 +73,28 @@
         </form>
     </div>
 
-    <div style="margin-top: 25px;">
+    <!-- Back button -->
+    <div style="margin-top: 30px;">
         <a href="{{ url_for('puzzles.list_puzzles') }}" 
-           style="color: #007bff; text-decoration: none; font-size: 1.05em;">
+           style="color: #007bff; text-decoration: none; font-size: 1.1em;">
             ← Back to All Puzzles
         </a>
     </div>
 
 </div>
+
+<script>
+    // Optional: Submit form when Enter is pressed in the input field
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('answer-input');
+        if (input) {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('answer-form').submit();
+                }
+            });
+        }
+    });
+</script>
+
 {% endblock %}
