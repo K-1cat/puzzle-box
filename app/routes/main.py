@@ -12,8 +12,8 @@ def index():
 @main_bp.route('/admin/users')
 @login_required
 def admin_users():
-    # Only allow access if username contains "admin" or you are the first user (id == 1)
-    if current_user.id != 1 and "admin" not in current_user.username.lower():
+    # Only allow access if user_id == 1 (admin)
+    if current_user.id != 1:
         flash("Access denied. Admin only.", "danger")
         return redirect(url_for('main.index'))
     
