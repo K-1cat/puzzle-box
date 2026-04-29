@@ -54,11 +54,13 @@ puzzle-box/
 │   ├── routes/                   # Route blueprints
 │   │   ├── __init__.py
 │   │   ├── auth.py               # Authentication routes
-│   │   └── main.py               # Main application routes
+│   │   ├── main.py               # Main application routes
+│   │   └── puzzle.py             # Puzzle routes
 │   ├── templates/                # Jinja2 HTML templates
 │   │   ├── admin_users.html      # Admin template
 │   │   ├── base.html             # Base template
 │   │   ├── index.html            # Homepage template
+│   │   ├── list.html             # Puzzle-listing template
 │   │   ├── login.html            # Login template
 │   │   └── register.html         # Register template
 │   └── static/                   # Static files (CSS, JS, images)

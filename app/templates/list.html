@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if puzzles %}
+    <h2>Available Puzzles</h2>
+    <ul style="list-style-type: none; padding: 0;">
+        {% for puzzle in puzzles %}
+        <li style="margin-bottom: 15px; padding: 15px; background-color: #f0f0f0; border-radius: 8px;">
+            <a href="{{ url_for('main.puzzle_detail', puzzle_id=puzzle.id) }}" 
+               style="text-decoration: none; color: #007bff; font-size: 18px;">
+                {{ puzzle.title }} ({{ puzzle.puzzle_type.value.capitalize() }})
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No puzzles available at the moment. Please check back later!</p>
+{% endif %}
+
+{% endblock %}

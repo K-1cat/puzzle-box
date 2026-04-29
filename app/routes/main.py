@@ -17,5 +17,5 @@ def admin_users():
         flash("Access denied. Admin only.", "danger")
         return redirect(url_for('main.index'))
     
-    users = User.query.order_by(User.created_at.desc()).all()
+    users = User.query.order_by(User.id).all()
     return render_template('admin_users.html', users=users)

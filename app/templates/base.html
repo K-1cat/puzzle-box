@@ -25,8 +25,12 @@
         
         <nav>
             <a href="{{ url_for('main.index') }}">Home</a>
+            <a href="{{ url_for('puzzle.list_puzzles') }}">Puzzles</a>
+            {% if current_user.is_admin %}
+                <a href="{{ url_for('main.admin_users') }}">Admin</a>
+            {% endif %}
             {% if current_user.is_authenticated %}
-                <span>Welcome, <strong>{{ current_user.username }}</strong>!</span>
+                <span>Welcome, <strong>{{ current_user.username }}</strong></span>
                 <a href="{{ url_for('auth.logout') }}">Logout</a>
             {% else %}
                 <a href="{{ url_for('auth.login') }}">Login</a>

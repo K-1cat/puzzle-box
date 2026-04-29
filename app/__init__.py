@@ -33,8 +33,10 @@ def create_app():
     # Blueprints
     from app.routes.main import main_bp
     from app.routes.auth import auth_bp
+    from app.routes.puzzle import puzzle_bp
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(puzzle_bp)
 
     # Create database tables
     with app.app_context():
