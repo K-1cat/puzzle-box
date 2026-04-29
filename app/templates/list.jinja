@@ -7,8 +7,18 @@
         {% for puzzle in puzzles %}
         <li style="margin-bottom: 15px; padding: 15px; background-color: #f0f0f0; border-radius: 8px;">
             <a href="{{ url_for('puzzle.view_puzzle', puzzle_id=puzzle.id) }}" 
-               style="text-decoration: none; color: #007bff; font-size: 18px;">
-                {{ puzzle.title }} ({{ puzzle.puzzle_type.value.capitalize() }})
+               style="text-decoration: none; color: #007bff; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                {% if puzzle.puzzle_type.value == 'image' %}
+                    {% set image_puzzle = puzzle_images.get(puzzle.id) %}
+                    {% if image_puzzle %}
+                        <img src="{{ url_for('static', filename='uploads/' + image_puzzle.image_filename) }}" 
+                             alt="{{ puzzle.title }}" 
+                             style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                    {% endif %}
+                {% elif puzzle.puzzle_type.value == 'text' %}
+                    <span style="font-size: 24px;">📝</span>
+                {% endif %}
+                <span>{{ puzzle.title }}</span>
             </a>
         </li>
         {% endfor %}

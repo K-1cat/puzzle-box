@@ -4,12 +4,23 @@ from app import db
 from app.models import Puzzle, PuzzleType, TextPuzzle, ImagePuzzle
 from werkzeug.utils import secure_filename
 import os
+from PIL import Image
 
 puzzle_bp = Blueprint('puzzle', __name__)
 
 @puzzle_bp.route('/puzzles')
 def list_puzzles():
-    return render_template('list.jinja', puzzles=db.session.query(Puzzle).all())
+    puzzles = db.session.query(Puzzle).all()
+    
+    # Fetch image puzzles to display thumbnails
+    puzzle_images = {}
+    for puzzle in puzzles:
+        if puzzle.puzzle_type == PuzzleType.IMAGE:
+            image_puzzle = db.session.query(ImagePuzzle).filter_by(puzzle_id=puzzle.id).first()
+            if image_puzzle:
+                puzzle_images[puzzle.id] = image_puzzle
+    
+    return render_template('list.jinja', puzzles=puzzles, puzzle_images=puzzle_images)
 
 
 @puzzle_bp.route('/puzzles/<int:puzzle_id>', methods=['GET', 'POST'])
@@ -74,6 +85,13 @@ def create_text_puzzle():
 @puzzle_bp.route('/puzzles/create/image', methods=['GET', 'POST'])
 @login_required
 def create_image_puzzle():
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    MAX_WIDTH = 1920
+    MAX_HEIGHT = 1080
+    
+    def allowed_file(filename):
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
     if request.method == 'POST':
         title = request.form.get('title')
         image = request.files.get('image')
@@ -83,10 +101,38 @@ def create_image_puzzle():
             flash('Title, image, and answer are required.', 'danger')
             return redirect(request.url)
         
-        # Secure filename and save
-        filename = secure_filename(image.filename)
-        image_path = os.path.join('app', 'static', 'uploads', filename)
-        image.save(image_path)
+        if not allowed_file(image.filename):
+            flash('Invalid file type. Allowed types: PNG, JPG, JPEG, GIF, WebP.', 'danger')
+            return redirect(request.url)
+        
+        # Check file size (5MB limit)
+        MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB in bytes
+        image.seek(0, os.SEEK_END)  # Seek to end to get file size
+        file_size = image.tell()
+        image.seek(0)  # Reset file pointer
+        
+        if file_size > MAX_FILE_SIZE:
+            flash('Image file is too large. Maximum size allowed is 5MB.', 'danger')
+            return redirect(request.url)
+        
+        # Check image dimensions
+        try:
+            img = Image.open(image)
+            width, height = img.size
+            
+            if width > MAX_WIDTH or height > MAX_HEIGHT:
+                # Resize image to fit within limits while maintaining aspect ratio
+                img.thumbnail((MAX_WIDTH, MAX_HEIGHT), Image.Resampling.LANCZOS)
+                flash(f'Image was resized from {width}x{height} to {img.size[0]}x{img.size[1]} to fit size limits.', 'info')
+            
+            # Save the processed image
+            filename = secure_filename(image.filename)
+            image_path = os.path.join('app', 'static', 'uploads', filename)
+            img.save(image_path)
+            
+        except Exception as e:
+            flash('Invalid image file. Please upload a valid image.', 'danger')
+            return redirect(request.url)
         
         # Create puzzle
         puzzle = Puzzle(title=title, puzzle_type=PuzzleType.IMAGE, answer=answer, author_id=current_user.id)
