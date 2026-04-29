@@ -26,7 +26,7 @@ def register():
         flash(f'Welcome to Puzzle Box, {user.username}! Your account has been created.', 'success')
         return redirect(url_for('main.index'))
     
-    return render_template('register.html', form=form)
+    return render_template('register.jinja', form=form)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -45,7 +45,7 @@ def login():
         else:
             flash('Login failed. Please check your username and password.', 'danger')
     
-    return render_template('login.html', form=form)
+    return render_template('login.jinja', form=form)
 
 @auth_bp.route('/logout')
 @login_required

@@ -6,7 +6,7 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.jinja')
 
 # Temporary admin route to see all users
 @main_bp.route('/admin/users')
@@ -18,4 +18,4 @@ def admin_users():
         return redirect(url_for('main.index'))
     
     users = User.query.order_by(User.id).all()
-    return render_template('admin_users.html', users=users)
+    return render_template('admin_users.jinja', users=users)

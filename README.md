@@ -57,16 +57,16 @@ puzzle-box/
 │   │   ├── main.py               # Main application routes
 │   │   └── puzzle.py             # Puzzle routes
 │   ├── templates/                # Jinja2 HTML templates
-│   │   ├── admin_users.html      # Admin template
-│   │   ├── base.html             # Base template
-│   │   ├── create_image.html     # image-puzzle creation template
-│   │   ├── create_text.html      # text-puzzle creation template
-│   │   ├── create.html           # puzzle creation template
-│   │   ├── index.html            # Homepage template
-│   │   ├── list.html             # Puzzle-listing template
-│   │   ├── login.html            # Login template
-│   │   ├── register.html         # Register template
-│   │   └── view.html             # puzzle viewing template
+│   │   ├── admin_users.jinja      # Admin template
+│   │   ├── base.jinja             # Base template
+│   │   ├── create_image.jinja     # image-puzzle creation template
+│   │   ├── create_text.jinja      # text-puzzle creation template
+│   │   ├── create.jinja           # puzzle creation template
+│   │   ├── index.jinja            # Homepage template
+│   │   ├── list.jinja             # Puzzle-listing template
+│   │   ├── login.jinja            # Login template
+│   │   ├── register.jinja         # Register template
+│   │   └── view.jinja             # puzzle viewing template
 │   └── static/                   # Static files (CSS, JS, images)
 │       ├── css/
 │       └── uploads/              # User-uploaded files

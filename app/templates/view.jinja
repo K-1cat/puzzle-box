@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.jinja" %}
 
 {% block content %}
 {% if puzzle == None %}
@@ -24,8 +24,18 @@
     <p>Unsupported puzzle type.</p>
 {% endif %}
 
-<label for="answer">Your Answer:</label>
-<input type="text" id="answer" name="answer" placeholder="Enter your answer here..."><br><br>
+{% if result %}
+    <div style="padding: 12px; margin: 15px 0; border-radius: 5px; {% if result.correct %}background: #d4edda; color: #155724;{% else %}background: #f8d7da; color: #721c24;{% endif %}">
+        {{ result.message }}
+    </div>
+{% endif %}
 
-<button type="submit">Submit Answer</button>
+<form method="POST">
+    <label for="answer">Your Answer:</label>
+    <input type="text" id="answer" name="answer" placeholder="Enter your answer here..." required><br><br>
+    
+    <button type="submit">Submit Answer</button>
+</form>
+
+<p><a href="{{ url_for('puzzle.list_puzzles') }}">← Back to Puzzles</a></p>
 {% endblock %}

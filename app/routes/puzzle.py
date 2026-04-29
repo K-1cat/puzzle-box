@@ -9,35 +9,38 @@ puzzle_bp = Blueprint('puzzle', __name__)
 
 @puzzle_bp.route('/puzzles')
 def list_puzzles():
-    return render_template('list.html', puzzles=db.session.query(Puzzle).all())
+    return render_template('list.jinja', puzzles=db.session.query(Puzzle).all())
 
 
 @puzzle_bp.route('/puzzles/<int:puzzle_id>', methods=['GET', 'POST'])
 def view_puzzle(puzzle_id):
     puzzle = db.session.query(Puzzle).filter_by(id=puzzle_id).first_or_404()
-
+    result = None
+    
     if request.method == 'POST':
-        answer = request.form.get('answer')
-        if answer == puzzle.answer:
-            flash('Correct answer!', 'success')
+        user_answer = request.form.get('answer', '').strip()
+        correct_answer = puzzle.answer.strip()
+        
+        # Case-insensitive comparison
+        if user_answer.lower() == correct_answer.lower():
+            result = {'correct': True, 'message': 'Correct! You solved the puzzle!'}
         else:
-            flash('Incorrect answer.', 'danger')
-        return redirect(request.url)
+            result = {'correct': False, 'message': 'Incorrect. Try again!'}
     
     if puzzle.puzzle_type == PuzzleType.TEXT:
         text_puzzle = db.session.query(TextPuzzle).filter_by(puzzle_id=puzzle_id).first()
-        return render_template('view.html', puzzle=puzzle, text_puzzle=text_puzzle)
+        return render_template('view.jinja', puzzle=puzzle, text_puzzle=text_puzzle, result=result)
     elif puzzle.puzzle_type == PuzzleType.IMAGE:
         image_puzzle = db.session.query(ImagePuzzle).filter_by(puzzle_id=puzzle_id).first()
-        return render_template('view.html', puzzle=puzzle, image_puzzle=image_puzzle)
+        return render_template('view.jinja', puzzle=puzzle, image_puzzle=image_puzzle, result=result)
     else:
-        return render_template('view.html', puzzle=None)
+        return render_template('view.jinja', puzzle=None, result=result)
 
 
 @puzzle_bp.route('/puzzles/create')
 @login_required
 def create_puzzle():
-    return render_template('create.html')
+    return render_template('create.jinja')
 
 
 @puzzle_bp.route('/puzzles/create/text', methods=['GET', 'POST'])
@@ -65,7 +68,7 @@ def create_text_puzzle():
         flash('Text puzzle created successfully!', 'success')
         return redirect(url_for('puzzle.list_puzzles'))
     
-    return render_template('create_text.html')
+    return render_template('create_text.jinja')
 
 
 @puzzle_bp.route('/puzzles/create/image', methods=['GET', 'POST'])
@@ -98,4 +101,4 @@ def create_image_puzzle():
         flash('Image puzzle created successfully!', 'success')
         return redirect(url_for('puzzle.list_puzzles'))
     
-    return render_template('create_image.html')
+    return render_template('create_image.jinja')
