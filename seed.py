@@ -39,17 +39,19 @@ def seed_database():
         else:
             print('Admin user already exists.')
 
-        # Create a single text puzzle
+        # Create a text puzzle and an image puzzle
         text_puzzle = Puzzle(title='Sample Text Puzzle', puzzle_type=PuzzleType.TEXT, answer='answer', author_id=admin_user.id)
-        db.session.add(text_puzzle)
+        image_puzzle = Puzzle(title='Sample Image Puzzle', puzzle_type=PuzzleType.IMAGE, answer='answer', author_id=admin_user.id)
+        db.session.add_all([text_puzzle, image_puzzle])
         db.session.flush()
 
-        puzzle_content = TextPuzzle(puzzle_id=text_puzzle.id, content='This is the first example text puzzle. Solve it!')
-        db.session.add(puzzle_content)
+        text_puzzle_content = TextPuzzle(puzzle_id=text_puzzle.id, content='This is the first example text puzzle. Solve it!')
+        image_puzzle_content = ImagePuzzle(puzzle_id=image_puzzle.id, image_filename='.png')
+        db.session.add_all([text_puzzle_content, image_puzzle_content])
         db.session.commit()
 
-        print('Text puzzle created successfully.')
-        print('Puzzle ID:', text_puzzle.id)
+        print('Text and image puzzles created successfully.')
+        print('Puzzle IDs:', text_puzzle.id, image_puzzle.id)
 
 
 if __name__ == '__main__':
