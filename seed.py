@@ -1,3 +1,5 @@
+import os
+
 from app import create_app, db
 from app.models import User, Puzzle, TextPuzzle, ImagePuzzle, PuzzleType
 
@@ -8,6 +10,15 @@ def seed_database():
     with app.app_context():
         # Ensure tables exist
         db.create_all()
+
+        # Remove existing uploaded files for image puzzles
+        upload_folder = os.path.join(app.root_path, 'static', 'uploads')
+        for image in db.session.query(ImagePuzzle).all():
+            if image.image_filename:
+                image_path = os.path.join(upload_folder, image.image_filename)
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+                    print(f'Removed uploaded image: {image.image_filename}')
 
         # Remove existing puzzle data only
         db.session.query(ImagePuzzle).delete()
