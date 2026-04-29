@@ -12,7 +12,7 @@ Puzzle Box is a full-stack web application that allows users to create original 
 
 ## 🚀 Features (Planned / In Progress)
 - File upload system for puzzle images
-- Puzzle creation editor (image upload + hotspot / answer settings)
+- Puzzle creation editor (image upload / answer settings)
 - Interactive puzzle solving page
 - Puzzle list with search and filtering
 - User profile and created puzzles management
@@ -59,10 +59,14 @@ puzzle-box/
 │   ├── templates/                # Jinja2 HTML templates
 │   │   ├── admin_users.html      # Admin template
 │   │   ├── base.html             # Base template
+│   │   ├── create_image.html     # image-puzzle creation template
+│   │   ├── create_text.html      # text-puzzle creation template
+│   │   ├── create.html           # puzzle creation template
 │   │   ├── index.html            # Homepage template
 │   │   ├── list.html             # Puzzle-listing template
 │   │   ├── login.html            # Login template
-│   │   └── register.html         # Register template
+│   │   ├── register.html         # Register template
+│   │   └── view.html             # puzzle viewing template
 │   └── static/                   # Static files (CSS, JS, images)
 │       ├── css/
 │       └── uploads/              # User-uploaded files

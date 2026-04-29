@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if puzzle == None %}
+    <p>Puzzle not found.</p>
+
+{% elif puzzle.puzzle_type.value == 'text' %}
+    <h2>{{ puzzle.title }}</h2>
+    {% if text_puzzle %}
+        <p>{{ text_puzzle.content }}</p>
+    {% else %}
+        <p>Text puzzle content not found.</p>
+    {% endif %}
+
+{% elif puzzle.puzzle_type.value == 'image' %}
+    <h2>{{ puzzle.title }}</h2>
+    {% if image_puzzle %}
+        <img src="{{ url_for('static', filename='uploads/' + image_puzzle.image_filename) }}" alt="{{ puzzle.title }}" style="max-width: 100%; height: auto;">
+    {% else %}
+        <p>Image puzzle not found.</p>
+    {% endif %}
+
+{% else %}
+    <p>Unsupported puzzle type.</p>
+{% endif %}
+
+<label for="answer">Your Answer:</label>
+<input type="text" id="answer" name="answer" placeholder="Enter your answer here..."><br><br>
+
+<button type="submit">Submit Answer</button>
+{% endblock %}

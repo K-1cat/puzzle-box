@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Create Image Puzzle</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <label for="title">Puzzle Title:</label>
+    <input type="text" id="title" name="title" required><br><br>
+    
+    <label for="image">Puzzle Image:</label>
+    <input type="file" id="image" name="image" accept="image/*" required><br><br>
+    
+    <button type="submit">Create Puzzle</button>
+</form>
+
+<p><a href="{{ url_for('puzzle.create_puzzle') }}">← Back to Puzzle Types</a></p>
+{% endblock %}
